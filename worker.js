@@ -30,7 +30,7 @@ function getContentHandler(urlConfig) {
   class ElementHandler {
     text(text) {
       urlConfig.forEach((configRule) => {
-        let updatedText = text.text.replace(configRule.a, configRule.n);
+        let updatedText = text.text.replace(configRule.o, configRule.n);
         text.replace(updatedText, { html: true });
       });
     }
