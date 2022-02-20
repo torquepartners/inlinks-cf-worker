@@ -7,7 +7,7 @@
  */
 
 // EDIT HERE.
-const INLINKS_PID = 16211;
+const INLINKS_PID = "";
 
 /**
  * Helper method to fetch configuration data from the InLinks service.
@@ -29,10 +29,11 @@ async function getUrlConfig(configKey) {
 function getContentHandler(urlConfig) {
   class ElementHandler {
     text(text) {
+      let textBlock = text.text;
       urlConfig.forEach((configRule) => {
-        let updatedText = text.text.replace(configRule.o, configRule.n);
-        text.replace(updatedText, { html: true });
+        textBlock = textBlock.replace(configRule.o, configRule.n);
       });
+      text.replace(textBlock, { html: true });
     }
   }
   return new ElementHandler();
