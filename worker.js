@@ -6,9 +6,6 @@
  * had been added server-side on the origin server.
  */
 
-// EDIT HERE.
-const INLINKS_PID = "";
-
 /**
  * Helper method to fetch configuration data from the InLinks service.
  * @param {string} configKey - The configuration key for the current URL.
@@ -59,27 +56,31 @@ function getSchemaHandler(urlConfig) {
 }
 
 async function handleRequest(request) {
-  // Fetch configuration for the current page from InLinks.
-  const urlKey = request.url.replace(/\/|\.|\-|\:|\=|\?/gi, "");
-  const urlConfig = await getUrlConfig(urlKey);
-
   // Pass through the request to the origin web server.
   const originResponse = await fetch(request);
 
-  // If configuration rules exist for this page, apply the modifications.
-  if (urlConfig && Array.isArray(urlConfig) && urlConfig.length) {
-    // Group configuration rules based on type.
-    const contentRules = urlConfig.filter((u) => u.t == "p" || u.t == "li");
-    const schemaRules = urlConfig.filter((u) => u.t == "s");
+  if (INLINKS_PID) {
+    // Fetch configuration for the current page from InLinks.
+    const urlKey = request.url.replace(/\/|\.|\-|\:|\=|\?/gi, "");
+    const urlConfig = await getUrlConfig(urlKey);
 
-    // Set up handlers to rewrite / inject content.
-    const contentHandler = getContentHandler(contentRules);
-    const schemaHandler = getSchemaHandler(schemaRules);
+    // If configuration rules exist for this page, apply the modifications.
+    if (urlConfig && Array.isArray(urlConfig) && urlConfig.length) {
+      // Group configuration rules based on type.
+      const contentRules = urlConfig.filter((u) => u.t == "p" || u.t == "li");
+      const schemaRules = urlConfig.filter((u) => u.t == "s");
 
-    return new HTMLRewriter()
-      .on("p, li", contentHandler)
-      .on("head", schemaHandler)
-      .transform(originResponse);
+      // Set up handlers to rewrite / inject content.
+      const contentHandler = getContentHandler(contentRules);
+      const schemaHandler = getSchemaHandler(schemaRules);
+
+      return new HTMLRewriter()
+        .on("p, li", contentHandler)
+        .on("head", schemaHandler)
+        .transform(originResponse);
+    } else {
+      return originResponse;
+    }
   } else {
     return originResponse;
   }
