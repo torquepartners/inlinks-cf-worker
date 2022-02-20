@@ -2,7 +2,7 @@
   "name": "inlinks-cf-worker",
   "version": "1.0.0",
   "description": "A Cloudflare Worker implementation of InLinks.",
-  "main": "worker.js",
+  "main": "./src/worker.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

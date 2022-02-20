@@ -1,0 +1,16 @@
+name = "inlinks-cf-worker"
+type = "javascript"
+compatibility_date = "2022-02-20"
+
+account_id = ""
+zone_id = ""
+route = ""
+
+[vars]
+INLINKS_PID = ""
+
+[build]
+command = "npm install"
+
+[build.upload]
+format = "service-worker"
